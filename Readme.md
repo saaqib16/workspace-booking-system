@@ -1,5 +1,7 @@
 # Smart Workspace Booking System
 
+Smart Workspace Booking System | Spring Boot + MySQL + JS
+
 ## 📌 Project Overview
 
 The Smart Workspace Booking System is a full-stack web application that allows employees to book meeting rooms efficiently while enabling administrators to manage workspace resources.
