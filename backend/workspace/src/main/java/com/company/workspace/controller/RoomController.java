@@ -1,18 +1,27 @@
 package com.company.workspace.controller;
 
 import com.company.workspace.model.Room;
+import com.company.workspace.service.BookingService;
 import com.company.workspace.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private BookingService bookingService;
 
     // Add Room
     @PostMapping
@@ -31,5 +40,27 @@ public class RoomController {
     public String deleteRoom(@PathVariable Long id) {
         roomService.deleteRoom(id);
         return "Room deleted successfully";
+    }
+
+    // 1. Get Available Rooms
+    @GetMapping("/available")
+    public List<Room> getAvailableRooms(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime endTime) {
+        return roomService.getAvailableRooms(date, startTime, endTime);
+    }
+
+    // 2. Check Room Availability
+    @GetMapping("/{id}/availability")
+    public Map<String, Boolean> checkRoomAvailability(
+            @PathVariable Long id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime endTime) {
+        boolean isAvailable = bookingService.isRoomAvailable(id, date, startTime, endTime);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("available", isAvailable);
+        return response;
     }
 }

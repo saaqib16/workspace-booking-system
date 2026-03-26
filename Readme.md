@@ -1,5 +1,7 @@
 # Smart Workspace Booking System
 
+Smart Workspace Booking System | Spring Boot + MySQL + JS
+
 ## 📌 Project Overview
 
 The Smart Workspace Booking System is a full-stack application for workspace room management, booking, and analytics. It now includes a React frontend, a Spring Boot REST API, and PostgreSQL/Supabase-ready configuration so the project can be run with a cleaner developer workflow.
