@@ -1,5 +1,6 @@
 import { useState } from "react";
 import API from "../services/api";
+import { getApiErrorMessage } from "../utils/apiError";
 
 const initialForm = {
   roomId: "",
@@ -79,9 +80,10 @@ export default function BookingForm({ currentUser, rooms, onBookingSuccess }) {
     } catch (error) {
       setStatus({
         type: "error",
-        message:
-          error.response?.data?.message ||
-          "Booking failed. Please try another room or time slot.",
+        message: getApiErrorMessage(
+          error,
+          "Booking failed. Please try another room or time slot."
+        ),
       });
     } finally {
       setSubmitting(false);

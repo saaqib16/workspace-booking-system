@@ -1,0 +1,8 @@
+{
+  "name": "workspace-booking-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Workspace Booking System",
+  "scripts": {
+    "start": "echo 'No build step required, serving static files.'"
+  }
+}

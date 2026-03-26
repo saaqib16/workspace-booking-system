@@ -1,6 +1,7 @@
 import { useState } from "react";
 import API from "../services/api";
 import AuthShowcase from "./AuthShowcase";
+import { getApiErrorMessage } from "../utils/apiError";
 
 const initialForm = {
   name: "",
@@ -82,16 +83,12 @@ export default function RegisterPage({ onRegistered, onShowLogin }) {
         });
       }
     } catch (error) {
-      const responseData = error.response?.data;
-      const validationMessage =
-        responseData?.message ||
-        Object.values(responseData || {})[0];
-
       setStatus({
         type: "error",
-        message:
-          validationMessage ||
-          "Unable to create the account right now. Please check the API.",
+        message: getApiErrorMessage(
+          error,
+          "Unable to create the account right now. Please check the API."
+        ),
       });
     } finally {
       setSubmitting(false);
@@ -111,7 +108,7 @@ export default function RegisterPage({ onRegistered, onShowLogin }) {
           <h2 className="login-panel__title">Register for workspace access</h2>
           <p className="login-panel__copy">
             This form sends a JSON payload to `/api/auth/register` on the Spring
-            Boot backend.
+            Boot backend, and login uses the same JSON-first flow.
           </p>
         </div>
 

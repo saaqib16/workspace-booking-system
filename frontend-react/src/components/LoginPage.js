@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import AuthShowcase from "./AuthShowcase";
+import { getApiErrorMessage } from "../utils/apiError";
 
 export default function LoginPage({
   initialEmail = "",
@@ -52,11 +53,9 @@ export default function LoginPage({
     });
 
     try {
-      const response = await API.post("/auth/login", null, {
-        params: {
-          email: form.email,
-          password: form.password,
-        },
+      const response = await API.post("/auth/login", {
+        email: form.email,
+        password: form.password,
       });
 
       if (onLogin) {
@@ -65,9 +64,10 @@ export default function LoginPage({
     } catch (error) {
       setStatus({
         type: "error",
-        message:
-          error.response?.data?.message ||
-          "Unable to sign in right now. Please check the API and your credentials.",
+        message: getApiErrorMessage(
+          error,
+          "Unable to sign in right now. Please check the API and your credentials."
+        ),
       });
     } finally {
       setSubmitting(false);

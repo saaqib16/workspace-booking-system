@@ -1,8 +1,12 @@
 package com.company.workspace.controller;
+import com.company.workspace.dto.AuthResponse;
+import com.company.workspace.dto.LoginRequest;
+import com.company.workspace.dto.RegisterRequest;
 import jakarta.validation.Valid;
-import com.company.workspace.model.User;
 import com.company.workspace.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,15 +18,13 @@ public class AuthController {
 
     // Register API
     @PostMapping("/register")
-    public User register(@Valid @RequestBody User user) {
-        return userService.register(user);
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(request));
     }
 
     // Login API
     @PostMapping("/login")
-    public User login(@RequestParam String email,
-                      @RequestParam String password) {
-
-        return userService.login(email, password);
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
+        return userService.login(request);
     }
 }

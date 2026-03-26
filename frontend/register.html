@@ -27,7 +27,7 @@
 </form>
 
 <script>
-    const API = "http://localhost:8080/api/auth";
+    const API = "/api/auth";
 
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
 
@@ -40,20 +40,24 @@
             role: document.getElementById("role").value
         };
 
-        const res = await fetch(`${API}/register`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(user)
-        });
+        try {
+            const res = await fetch(`${API}/register`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(user)
+            });
 
-        if (!res.ok) {
-            const err = await res.json();
-            alert(err.message || JSON.stringify(err));
-            return;
+            if (!res.ok) {
+                const err = await res.json();
+                alert(err.message || JSON.stringify(err));
+                return;
+            }
+
+            alert("Registered successfully ✅");
+            window.location.href = "login.html";
+        } catch (error) {
+            alert("Unable to connect to the backend right now.");
         }
-
-        alert("Registered successfully ✅");
-        window.location.href = "login.html";
     });
 </script>
 

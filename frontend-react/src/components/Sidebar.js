@@ -1,22 +1,37 @@
-const sections = [
-  {
-    title: "Dashboard",
-    description: "Live workspace overview",
-    active: true,
-  },
-  {
-    title: "Rooms",
-    description: "Capacity and location details",
-  },
-  {
-    title: "Bookings",
-    description: "Create and track reservations",
-  },
-  {
-    title: "Analytics",
-    description: "Usage insights and trends",
-  },
-];
+function getSections(canManageRooms) {
+  const sections = [
+    {
+      key: "dashboard",
+      title: "Dashboard",
+      description: "Live workspace overview",
+    },
+    {
+      key: "rooms",
+      title: "Rooms",
+      description: "Explore capacity and location details",
+    },
+    {
+      key: "bookings",
+      title: "Bookings",
+      description: "Create reservations with your account",
+    },
+    {
+      key: "analytics",
+      title: "Analytics",
+      description: "Usage insights and room trends",
+    },
+  ];
+
+  if (canManageRooms) {
+    sections.splice(2, 0, {
+      key: "manageRooms",
+      title: "Manage Rooms",
+      description: "Add and remove inventory",
+    });
+  }
+
+  return sections;
+}
 
 function formatRole(role) {
   if (!role) {
@@ -26,7 +41,14 @@ function formatRole(role) {
   return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
 }
 
-export default function Sidebar({ currentUser, onLogout }) {
+export default function Sidebar({
+  currentUser,
+  activeView,
+  onNavigate,
+  onLogout,
+}) {
+  const sections = getSections(currentUser?.role === "ADMIN");
+
   return (
     <aside className="sidebar">
       <div>
@@ -40,15 +62,17 @@ export default function Sidebar({ currentUser, onLogout }) {
 
       <div className="sidebar__nav">
         {sections.map((section) => (
-          <div
+          <button
             key={section.title}
             className={`sidebar__item${
-              section.active ? " sidebar__item--active" : ""
+              activeView === section.key ? " sidebar__item--active" : ""
             }`}
+            onClick={() => onNavigate?.(section.key)}
+            type="button"
           >
             <strong>{section.title}</strong>
             <span>{section.description}</span>
-          </div>
+          </button>
         ))}
       </div>
 
