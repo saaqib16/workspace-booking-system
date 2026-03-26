@@ -1,53 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Workspace</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
+<body class="d-flex align-items-center justify-content-center">
 
-<body class="container mt-5">
+<div class="glass-card" style="width: 100%; max-width: 420px; z-index: 10;">
+    <div class="text-center mb-4">
+        <i class="bi bi-building-check text-primary" style="font-size: 3rem; background: -webkit-linear-gradient(135deg, #a855f7, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+        <h2 class="fw-bold mt-2">Welcome Back</h2>
+        <p class="text-white-50">Log in to book your workspace</p>
+    </div>
+    
+    <form id="loginForm">
+        <div class="form-floating mb-3">
+            <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+            <label for="email">Email address</label>
+        </div>
+        
+        <div class="form-floating mb-4">
+            <input type="password" id="password" class="form-control" placeholder="Password" required>
+            <label for="password">Password</label>
+        </div>
+        
+        <button class="btn btn-primary w-100 py-3 mb-3 fw-bold fs-5">Sign In</button>
+        <p class="text-center mb-0 text-white-50">Don't have an account? <a href="register.html" class="text-white fw-bold text-decoration-none border-bottom border-primary">Register</a></p>
+    </form>
+</div>
 
-<h2 class="text-center">Login</h2>
+<!-- Decorative background elements -->
+<div style="position: fixed; top: 10%; left: 15%; width: 300px; height: 300px; background: radial-gradient(circle, #8b5cf6, transparent 70%); border-radius: 50%; filter: blur(60px); opacity: 0.5; z-index: 0;"></div>
+<div style="position: fixed; bottom: 10%; right: 15%; width: 400px; height: 400px; background: radial-gradient(circle, #eca184, transparent 70%); border-radius: 50%; filter: blur(80px); opacity: 0.3; z-index: 0;"></div>
 
-<form id="loginForm">
-
-    <input type="email" id="email" class="form-control mb-2" placeholder="Email" required>
-
-    <input type="password" id="password" class="form-control mb-2" placeholder="Password" required>
-
-    <button class="btn btn-primary w-100">Login</button>
-
-</form>
-
+<script src="config.js"></script>
 <script>
-    const API = "http://localhost:8080/api/auth";
-
+    const API = window.APP_CONFIG.API_BASE_URL + "/auth";
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
-
         e.preventDefault();
-
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
+        const btn = document.querySelector('button');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Authenticating...';
+        btn.disabled = true;
 
-        const res = await fetch(`${API}/login?email=${email}&password=${password}`, {
-            method: "POST"
-        });
-
-        if (!res.ok) {
-            const err = await res.json();
-            alert(err.message || JSON.stringify(err));
-            return;
+        try {
+            const res = await fetch(`${API}/login?email=${email}&password=${password}`, { method: "POST" });
+            if (!res.ok) {
+                const err = await res.json();
+                alert(err.message || "Invalid credentials");
+                btn.innerHTML = 'Sign In';
+                btn.disabled = false;
+                return;
+            }
+            const user = await res.json();
+            localStorage.setItem("user", JSON.stringify(user));
+            window.location.href = "dashboard.html";
+        } catch (err) {
+            alert("Error connecting to server. Please try again.");
+            btn.innerHTML = 'Sign In';
+            btn.disabled = false;
         }
-
-        const user = await res.json();
-
-        // Save user in browser
-        localStorage.setItem("user", JSON.stringify(user));
-
-        // Redirect
-        window.location.href = "dashboard.html";
     });
 </script>
-
 </body>
 </html>

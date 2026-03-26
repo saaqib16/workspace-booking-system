@@ -1,19 +1,27 @@
 package com.company.workspace.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
+@Table(name = "rooms")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String roomName;
-    private int capacity;
-    private String location;
+    @Column(name = "room_number", nullable = false)
+    private String roomNumber;
 
-    // Getters & Setters
+    @Column(name = "type", nullable = false)
+    private String type;
+
+    @Column(name = "capacity", nullable = false)
+    private int capacity;
+
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
     public Long getId() {
         return id;
@@ -21,6 +29,22 @@ public class Room {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getCapacity() {
@@ -31,19 +55,11 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

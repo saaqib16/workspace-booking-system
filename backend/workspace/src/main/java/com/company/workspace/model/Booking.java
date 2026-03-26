@@ -2,21 +2,23 @@ package com.company.workspace.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
+@Table(name = "bookings")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @Column(name = "room_id")
     private Long roomId;
 
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    @Column(name = "check_in", nullable = false)
+    private LocalDate checkIn;
+
+    @Column(name = "check_out", nullable = false)
+    private LocalDate checkOut;
 
     public Long getId() {
         return id;
@@ -24,14 +26,6 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public Long getRoomId() {
@@ -42,27 +36,19 @@ public class Booking {
         this.roomId = roomId;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCheckIn() {
+        return checkIn;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setCheckIn(LocalDate checkIn) {
+        this.checkIn = checkIn;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
+    public LocalDate getCheckOut() {
+        return checkOut;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
+    public void setCheckOut(LocalDate checkOut) {
+        this.checkOut = checkOut;
     }
 }
