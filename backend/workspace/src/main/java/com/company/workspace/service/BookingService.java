@@ -5,6 +5,7 @@ import com.company.workspace.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -13,27 +14,18 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    public boolean isRoomAvailable(Long roomId, LocalDate checkIn, LocalDate checkOut) {
+        List<Booking> overlaps = bookingRepository.findOverlappingBookings(roomId, checkIn, checkOut);
+        return overlaps.isEmpty();
+    }
+
     public Booking bookRoom(Booking booking) {
-        if (booking.getStartTime().isAfter(booking.getEndTime())) {
-            throw new RuntimeException("Start time must be before end time");
+        if (booking.getCheckIn().isAfter(booking.getCheckOut()) || booking.getCheckIn().isEqual(booking.getCheckOut())) {
+            throw new RuntimeException("Check-out date must be after check-in date");
         }
 
-        List<Booking> existingBookings =
-                bookingRepository.findByRoomIdAndDate(
-                        booking.getRoomId(),
-                        booking.getDate()
-                );
-
-        // 🔥 Conflict Check
-        for (Booking b : existingBookings) {
-
-            boolean overlap =
-                    booking.getStartTime().isBefore(b.getEndTime()) &&
-                            booking.getEndTime().isAfter(b.getStartTime());
-
-            if (overlap) {
-                throw new RuntimeException("Room already booked for this time slot!");
-            }
+        if (!isRoomAvailable(booking.getRoomId(), booking.getCheckIn(), booking.getCheckOut())) {
+            throw new RuntimeException("Room is already booked for these dates!");
         }
 
         return bookingRepository.save(booking);

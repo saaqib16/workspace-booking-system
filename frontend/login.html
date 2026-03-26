@@ -19,8 +19,9 @@
 
 </form>
 
+<script src="config.js"></script>
 <script>
-    const API = "http://localhost:8080/api/auth";
+    const API = window.APP_CONFIG.API_BASE_URL + "/auth";
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
