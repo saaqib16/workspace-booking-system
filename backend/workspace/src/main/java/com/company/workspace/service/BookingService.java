@@ -14,18 +14,18 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
-    public boolean isRoomAvailable(Long roomId, LocalDate checkIn, LocalDate checkOut) {
-        List<Booking> overlaps = bookingRepository.findOverlappingBookings(roomId, checkIn, checkOut);
+    public boolean isRoomAvailable(Long roomId, LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime) {
+        List<Booking> overlaps = bookingRepository.findOverlappingBookings(roomId, date, startTime, endTime);
         return overlaps.isEmpty();
     }
 
     public Booking bookRoom(Booking booking) {
-        if (booking.getCheckIn().isAfter(booking.getCheckOut()) || booking.getCheckIn().isEqual(booking.getCheckOut())) {
-            throw new RuntimeException("Check-out date must be after check-in date");
+        if (booking.getStartTime().isAfter(booking.getEndTime()) || booking.getStartTime().equals(booking.getEndTime())) {
+            throw new RuntimeException("End time must be after start time");
         }
 
-        if (!isRoomAvailable(booking.getRoomId(), booking.getCheckIn(), booking.getCheckOut())) {
-            throw new RuntimeException("Room is already booked for these dates!");
+        if (!isRoomAvailable(booking.getRoomId(), booking.getDate(), booking.getStartTime(), booking.getEndTime())) {
+            throw new RuntimeException("Room is already booked for this time slot!");
         }
 
         return bookingRepository.save(booking);

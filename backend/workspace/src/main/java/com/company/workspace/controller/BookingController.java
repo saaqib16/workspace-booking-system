@@ -34,9 +34,9 @@ public class BookingController {
     public Map<String, Boolean> validateBooking(@RequestBody Booking booking) {
         boolean isValid = false;
         try {
-            if (booking.getCheckIn() != null && booking.getCheckOut() != null 
-                && booking.getCheckIn().isBefore(booking.getCheckOut())) {
-                isValid = bookingService.isRoomAvailable(booking.getRoomId(), booking.getCheckIn(), booking.getCheckOut());
+            if (booking.getDate() != null && booking.getStartTime() != null && booking.getEndTime() != null 
+                && booking.getStartTime().isBefore(booking.getEndTime())) {
+                isValid = bookingService.isRoomAvailable(booking.getRoomId(), booking.getDate(), booking.getStartTime(), booking.getEndTime());
             }
         } catch (Exception e) {
             isValid = false;

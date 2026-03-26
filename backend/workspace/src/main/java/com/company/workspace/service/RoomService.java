@@ -28,11 +28,11 @@ public class RoomService {
         return roomRepository.findAll();
     }
     
-    // Get Available Rooms for Date Range
-    public List<Room> getAvailableRooms(LocalDate checkIn, LocalDate checkOut) {
+    // Get Available Rooms for Time Slot
+    public List<Room> getAvailableRooms(LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime) {
         List<Room> allRooms = roomRepository.findAll();
         return allRooms.stream()
-                .filter(room -> bookingService.isRoomAvailable(room.getId(), checkIn, checkOut))
+                .filter(room -> bookingService.isRoomAvailable(room.getId(), date, startTime, endTime))
                 .collect(Collectors.toList());
     }
 

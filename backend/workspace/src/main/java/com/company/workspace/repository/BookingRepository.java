@@ -11,10 +11,11 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("SELECT b FROM Booking b WHERE b.roomId = :roomId AND b.checkIn < :checkOut AND b.checkOut > :checkIn")
+    @Query("SELECT b FROM Booking b WHERE b.roomId = :roomId AND b.date = :date AND b.startTime < :endTime AND b.endTime > :startTime")
     List<Booking> findOverlappingBookings(
             @Param("roomId") Long roomId,
-            @Param("checkIn") LocalDate checkIn,
-            @Param("checkOut") LocalDate checkOut
+            @Param("date") LocalDate date,
+            @Param("startTime") java.time.LocalTime startTime,
+            @Param("endTime") java.time.LocalTime endTime
     );
 }

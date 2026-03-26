@@ -45,18 +45,20 @@ public class RoomController {
     // 1. Get Available Rooms
     @GetMapping("/available")
     public List<Room> getAvailableRooms(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut) {
-        return roomService.getAvailableRooms(checkIn, checkOut);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime endTime) {
+        return roomService.getAvailableRooms(date, startTime, endTime);
     }
 
     // 2. Check Room Availability
     @GetMapping("/{id}/availability")
     public Map<String, Boolean> checkRoomAvailability(
             @PathVariable Long id,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut) {
-        boolean isAvailable = bookingService.isRoomAvailable(id, checkIn, checkOut);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime endTime) {
+        boolean isAvailable = bookingService.isRoomAvailable(id, date, startTime, endTime);
         Map<String, Boolean> response = new HashMap<>();
         response.put("available", isAvailable);
         return response;
