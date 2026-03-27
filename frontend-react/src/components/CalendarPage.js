@@ -9,8 +9,8 @@ function toMinutesFromMidnight(isoString) {
   return d.getHours() * 60 + d.getMinutes();
 }
 
-function formatDate(isoString) {
-  return new Date(isoString).toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" });
+function formatDate(date) {
+  return new Date(date).toLocaleDateString("en-IN", { weekday: "short", month: "short", day: "numeric" });
 }
 
 function isSameDay(a, b) {
@@ -35,9 +35,16 @@ export default function CalendarPage({ rooms }) {
       setError("");
       try {
         const response = await API.get("/bookings");
-        setBookings(response.data);
+        setBookings(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
-        setError(getApiErrorMessage(err, "Unable to load bookings for the calendar."));
+        // Show a friendly notice, don't block the calendar from rendering
+        const msg = err?.response?.data?.message || "";
+        if (msg.toLowerCase().includes("jdbc") || msg.toLowerCase().includes("sql") || msg.toLowerCase().includes("database")) {
+          setError("The production database needs a schema migration. Run the SQL from the deployment guide, then redeploy on Render.");
+        } else {
+          setError("Could not load bookings. The timeline will show once the backend is reachable.");
+        }
+        setBookings([]);
       } finally {
         setLoading(false);
       }
@@ -79,7 +86,11 @@ export default function CalendarPage({ rooms }) {
         </div>
       </section>
 
-      {error ? <div className="error-state">{error}</div> : null}
+      {error ? (
+        <div className="calendar-notice">
+          ⚠️ {error}
+        </div>
+      ) : null}
 
       <section className="panel-card">
         <div className="panel-card__header">
