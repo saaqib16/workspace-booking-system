@@ -1,7 +1,7 @@
 package com.company.workspace.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
@@ -17,14 +17,11 @@ public class Booking {
     @Column(name = "room_id", nullable = false)
     private Long roomId;
 
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
+    @Column(name = "start_date_time", nullable = false)
+    private LocalDateTime startDateTime;
 
-    @Column(name = "start_time", nullable = false)
-    private java.time.LocalTime startTime;
-
-    @Column(name = "end_time", nullable = false)
-    private java.time.LocalTime endTime;
+    @Column(name = "end_date_time", nullable = false)
+    private LocalDateTime endDateTime;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -35,12 +32,9 @@ public class Booking {
     public Long getRoomId() { return roomId; }
     public void setRoomId(Long roomId) { this.roomId = roomId; }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public LocalDateTime getStartDateTime() { return startDateTime; }
+    public void setStartDateTime(LocalDateTime startDateTime) { this.startDateTime = startDateTime; }
 
-    public java.time.LocalTime getStartTime() { return startTime; }
-    public void setStartTime(java.time.LocalTime startTime) { this.startTime = startTime; }
-
-    public java.time.LocalTime getEndTime() { return endTime; }
-    public void setEndTime(java.time.LocalTime endTime) { this.endTime = endTime; }
+    public LocalDateTime getEndDateTime() { return endDateTime; }
+    public void setEndDateTime(LocalDateTime endDateTime) { this.endDateTime = endDateTime; }
 }

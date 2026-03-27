@@ -16,6 +16,16 @@ function getSections(canManageRooms) {
       description: "Create reservations with your account",
     },
     {
+      key: "myBookings",
+      title: "My Bookings",
+      description: "View and cancel your reservations",
+    },
+    {
+      key: "calendar",
+      title: "Calendar",
+      description: "Visual day timeline of all slots",
+    },
+    {
       key: "analytics",
       title: "Analytics",
       description: "Usage insights and room trends",

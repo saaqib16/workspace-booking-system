@@ -3,6 +3,7 @@ package com.company.workspace.controller;
 import com.company.workspace.model.Booking;
 import com.company.workspace.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    // 3. Create Booking
+    // Create Booking
     @PostMapping
     public Booking bookRoom(@RequestBody Booking booking) {
         return bookingService.bookRoom(booking);
@@ -29,19 +30,33 @@ public class BookingController {
         return bookingService.getAllBookings();
     }
 
-    // 4. Validate Booking
+    // Get Bookings by User
+    @GetMapping("/user/{userId}")
+    public List<Booking> getBookingsByUser(@PathVariable Long userId) {
+        return bookingService.getBookingsByUser(userId);
+    }
+
+    // Cancel Booking
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> cancelBooking(@PathVariable Long id) {
+        bookingService.cancelBooking(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Booking cancelled successfully.");
+        return ResponseEntity.ok(response);
+    }
+
+    // Validate Booking
     @PostMapping("/validate")
     public Map<String, Boolean> validateBooking(@RequestBody Booking booking) {
         boolean isValid = false;
         try {
-            if (booking.getDate() != null && booking.getStartTime() != null && booking.getEndTime() != null 
-                && booking.getStartTime().isBefore(booking.getEndTime())) {
-                isValid = bookingService.isRoomAvailable(booking.getRoomId(), booking.getDate(), booking.getStartTime(), booking.getEndTime());
+            if (booking.getStartDateTime() != null && booking.getEndDateTime() != null
+                    && booking.getStartDateTime().isBefore(booking.getEndDateTime())) {
+                isValid = bookingService.isRoomAvailable(booking.getRoomId(), booking.getStartDateTime(), booking.getEndDateTime());
             }
         } catch (Exception e) {
             isValid = false;
         }
-        
         Map<String, Boolean> response = new HashMap<>();
         response.put("valid", isValid);
         return response;

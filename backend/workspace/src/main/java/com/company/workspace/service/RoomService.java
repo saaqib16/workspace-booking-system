@@ -5,7 +5,7 @@ import com.company.workspace.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,12 +27,12 @@ public class RoomService {
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
-    
-    // Get Available Rooms for Time Slot
-    public List<Room> getAvailableRooms(LocalDate date, java.time.LocalTime startTime, java.time.LocalTime endTime) {
+
+    // Get Available Rooms for a DateTime range
+    public List<Room> getAvailableRooms(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         List<Room> allRooms = roomRepository.findAll();
         return allRooms.stream()
-                .filter(room -> bookingService.isRoomAvailable(room.getId(), date, startTime, endTime))
+                .filter(room -> bookingService.isRoomAvailable(room.getId(), startDateTime, endDateTime))
                 .collect(Collectors.toList());
     }
 

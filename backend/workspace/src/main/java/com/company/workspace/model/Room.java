@@ -11,17 +11,14 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "room_number", nullable = false)
-    private String roomNumber;
-
-    @Column(name = "type", nullable = false)
-    private String type;
+    @Column(name = "room_name", nullable = false)
+    private String roomName;
 
     @Column(name = "capacity", nullable = false)
     private int capacity;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Column(name = "location")
+    private String location;
 
     public Long getId() {
         return id;
@@ -31,20 +28,12 @@ public class Room {
         this.id = id;
     }
 
-    public String getRoomNumber() {
-        return roomNumber;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public int getCapacity() {
@@ -55,11 +44,11 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public String getLocation() {
+        return location;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

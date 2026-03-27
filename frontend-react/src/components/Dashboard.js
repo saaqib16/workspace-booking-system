@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Analytics from "./Analytics";
 import BookingForm from "./BookingForm";
+import CalendarPage from "./CalendarPage";
+import MyBookingsPage from "./MyBookingsPage";
 import RoomManagementPage from "./RoomManagementPage";
 import Rooms from "./Rooms";
 import RoomsPage from "./RoomsPage";
@@ -268,6 +270,20 @@ export default function Dashboard({ currentUser, onLogout }) {
 
     if (activeView === "bookings") {
       return renderBookingsView();
+    }
+
+    if (activeView === "myBookings") {
+      return (
+        <MyBookingsPage
+          currentUser={currentUser}
+          onBookingChanged={handleRefresh}
+          rooms={rooms}
+        />
+      );
+    }
+
+    if (activeView === "calendar") {
+      return <CalendarPage rooms={rooms} />;
     }
 
     if (activeView === "analytics") {

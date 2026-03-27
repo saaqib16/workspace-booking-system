@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,23 +42,21 @@ public class RoomController {
         return "Room deleted successfully";
     }
 
-    // 1. Get Available Rooms
+    // Get Available Rooms for a DateTime range
     @GetMapping("/available")
     public List<Room> getAvailableRooms(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime startTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime endTime) {
-        return roomService.getAvailableRooms(date, startTime, endTime);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        return roomService.getAvailableRooms(startDateTime, endDateTime);
     }
 
-    // 2. Check Room Availability
+    // Check Room Availability
     @GetMapping("/{id}/availability")
     public Map<String, Boolean> checkRoomAvailability(
             @PathVariable Long id,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime startTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) java.time.LocalTime endTime) {
-        boolean isAvailable = bookingService.isRoomAvailable(id, date, startTime, endTime);
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        boolean isAvailable = bookingService.isRoomAvailable(id, startDateTime, endDateTime);
         Map<String, Boolean> response = new HashMap<>();
         response.put("available", isAvailable);
         return response;
